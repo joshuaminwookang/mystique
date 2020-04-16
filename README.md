@@ -1,5 +1,3 @@
-
-  
 <p align="center">
-<img src='soar.pdf' width='500'> 
+<img src='soar.png' width='500'> 
 </p>
