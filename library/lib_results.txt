@@ -1,0 +1,13 @@
+ Results for function: 2 with ACCEL: 1
+  Elapsed ops count: 100000
+   Elapsed Time: 956 seconds
+   correctness of result: 0
+
+system uptime : 0 days, 4:45:31
+total RAM   : 118.4 MB
+free RAM   :  52.5 MB
+process count : 52
+load average: 1.02  1.00 0.91
+
+
+

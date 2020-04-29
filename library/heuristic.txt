@@ -1,0 +1,8 @@
+
+Ideas for implementing the heuristic function
+
+input:
+
+
+
+output: return a boolean, whether or not we should use HW

@@ -1,0 +1,67 @@
+FUNCT 2 SW
+system uptime : 1 days, 2:27:46
+total RAM   : 118.4 MB
+free RAM   :  52.5 MB
+process count : 49
+load average: 1.00  1.00 1.00
+
+ Results for function: 2 with SW 
+ Elapsed loop count: 1461896 with 1000 operations per loop
+ Elapsed Time: 5156 seconds
+#########################################
+FUNCT 2 HW
+system uptime : 0 days, 19:24:21
+total RAM   : 118.4 MB
+free RAM   :  71.1 MB
+process count : 48
+load average: 1.04  1.01 1.00
+
+ Results for function: 2 with HW 
+ Elapsed loop count: 884142 with 10000 operations per loop
+ Elapsed Time: -16889 seconds
+
+#########################3
+./powerTest-6-0-16.riscv 
+^Csystem uptime : 1 days, 5:34:39
+total RAM   : 118.4 MB
+free RAM   :  69.9 MB
+process count : 49
+load average: 1.05  1.01 1.00
+
+ Results for function: 6 with SW 
+ Elapsed loop count: 1661467 with 1000 operations per loop
+ Elapsed Time: -66918 seconds
+
+#####################
+powerTest-1-1-16
+system uptime : 0 days, 19:25:11
+total RAM   : 118.4 MB
+free RAM   :  72.1 MB
+process count : 46
+load average: 1.00  1.00 1.00
+ Results for function: 1 with HW 
+ Elapsed loop count: 482074 with 10000 operations per loop
+ Elapsed Time: 69632 seconds
+
+
+########################### (No SSH)
+./powerTest-2-1-16.riscv 
+^Csystem uptime : 0 days, 23:40:00 - 00:03:54
+total RAM   : 118.4 MB
+free RAM   :  71.5 MB
+process count : 47
+load average: 1.00  1.00 1.00
+ Results for function: 2 with HW 
+ Elapsed loop count: 821301 with 10000 operations per loop
+ Elapsed Time: -1463 seconds
+
+######################### (noSSh)
+./powerTest-2-0-16.riscv 
+system uptime : 1 days, 1:51:19
+total RAM   : 118.4 MB
+free RAM   :  71.4 MB
+process count : 47
+load average: 1.02  1.01 1.00
+ Results for function: 2 with SW 
+ Elapsed loop count: 1486421 with 1000 operations per loop
+ Elapsed Time: 6677 seconds

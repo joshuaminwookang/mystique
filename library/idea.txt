@@ -1,0 +1,61 @@
+// Dispatch mechanism (many complex systems have this)
+// Library with a dispatch mechanism to support making hw-sw calls for a wide variety of function
+
+cvoid generate (int i; int a []) {
+     if (useHW (GENERATE))
+     	gererate_hw(i,a);
+     else
+	generate_sw(i,a);
+}
+
+//all three functions have the same set of parameters (same signiature)
+
+To call useHW(GENERATE)
+
+#define BLOOM 0
+#define GENERATE 1
+#define STRCMP	 2
+
+// keep track of runtime
+
+// Metadata for each HW accelerator (possible)
+typedef struct accMeta {
+	void * hw_fun;
+	void * sw_fun;
+	int hw_avail; // 1 if accelerator is built-in (available)
+	int calls ; // # of calls
+	int call__rate;
+	/*ToDO: is there gonna be a size_penaltiy of turning on the HW */
+	int size_penalty; int speed_reward;
+
+	// other data and metrics to make judgements about hw vs sw
+	int loadfactor_on; int loadfactor_off;
+} accMeta;
+
+accMeta DNA [3] = {{//initialize  }}
+
+int useHWDynamically (int vectorNum) {
+    if (!initialized} { set up DNA}
+    if(!DNA[vectorNum].hwavail) {
+    	return 0;
+    }
+    // Heuristic decision function
+    if /...
+}
+
+int useSW
+
+int useHW
+
+int initialized = 0; // if not initialized
+
+// variable currentload
+// has the lib been initialized? get the load value in one cycle
+// assume this var has thte current load
+// Isolate the initialization routine (amortized over entire runtime)
+// called again to get load every 10 seconds ish
+// use same time granulity as getloadavg
+
+Timer-SIGNALS
+timer_create
+timer_settime
