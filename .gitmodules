@@ -1,0 +1,8 @@
+[submodule "lowrisc-chip"]
+	path = lowrisc-chip
+	url = https://github.com/lowRISC/lowrisc-chip.git
+	branch = refresh-v0.6
+[submodule "TheRoCCyMountains"]
+	path = TheRoCCyMountains
+	url = https://github.com/joshuaminwookang/TheRoCCyMountains.git
+	branch = master
