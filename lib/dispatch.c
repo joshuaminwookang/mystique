@@ -32,7 +32,7 @@ int nextRangedCombination(int n, int last, int min, int max, int *out) {
         disposable = disposable & (disposable - 1); //Discard the last bit set
     }
 
-    cap = 1 << n;
+o    cap = 1 << n;
     flipped = 1 & ~last;
     valid = (flipped == 0)? count > min : count < max;
     first = (mask < cap || !valid)? 1 & last : flipped; //The bit to be moved
