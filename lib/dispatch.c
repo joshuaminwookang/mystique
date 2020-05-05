@@ -19,9 +19,9 @@
 // DNA vector declaration
 accMeta DNA[NACC] =
 {
-    ACCEL(GENERATE0,1, generate0_hw, generate0_sw)
+    ACCEL(GENERATE0,0, generate0_hw, generate0_sw)
     ACCEL(GENERATE1,1, generate1_hw, generate1_sw)
-    ACCEL(GENERATE2,1, generate2_hw, generate2_sw)
+    ACCEL(GENERATE2,2, generate2_hw, generate2_sw)
     //ACCEL(STRCMP,1,strcmp_hw,strcmp_sw),    
 };
 
