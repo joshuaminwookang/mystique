@@ -100,8 +100,8 @@ int main(int argc, char **argv) {
 
   // Read in new ACCEL environemnt variable and reset HW or SW
   signal(SIGINT, sigintHandler);
-  int limit = 10;
-  if(ShellWantsHW) limit = 100;
+  // int limit = 10;
+  // if(ShellWantsHW) limit = 100;
   int testResult = 0;
   gettimeofday(&start_tv,NULL);
   start_time = start_tv.tv_sec%(24*3600);
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
     case 0:
       while (1) {
         asm volatile ("fence");
-        for (int i = 0; i < limit; i++) {
+        for (int i = 0; i < 1000; i++) {
 	        testResult = generate0(inputString, WIDTH, answer);
         }
         asm volatile ("fence");
@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
     case 1:
       while (1) {
         asm volatile ("fence");
-        for (int i = 0; i < limit; i++) {
+        for (int i = 0; i < 1000; i++) {
 	        testResult = generate1(inputString, WIDTH, answer);
         }
         asm volatile ("fence");
@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
     case 2: 
       while (1) {
         asm volatile ("fence");
-        for (int i = 0; i < limit; i++) {
+        for (int i = 0; i < 1000; i++) {
 	        testResult = generate2(inputString, WIDTH, answer);
         }
         asm volatile ("fence");
