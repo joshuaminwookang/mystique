@@ -91,7 +91,7 @@ int main(void) {
   while (1) {
       asm volatile ("fence");
       for (num_loops = 0; num_loops < 1000; num_loops++) {
-	testResult = generate(inputString, length, answer);
+	      testResult = generate(inputString, length, answer);
       }
       asm volatile ("fence");
       num_loops++;
