@@ -50,10 +50,10 @@ void sigintHandler(int dummy)
   end_time = end_tv.tv_sec%(24*3600);
 
   print_stats();
-  
+
   /* Reset handler to catch SIGINT next time. */
-  printf("\n Switching gears!\n Results for function: %d with ACCEL: %d \n Elapsed ops count: %lld\n Elapsed Time: %ld seconds\n",
-	   funct, ShellWantsHW,num_loops, end_time-start_time);
+  printf("\n Results for function: %d with ACCEL: %d \n Elapsed Loops count: %lld\n Elapsed Time: %ld seconds\n",
+	   funct, ShellWantsHW, num_loops, end_time-start_time);
   fflush(stdout);
   //  initDNA();
   //  gettimeofday(&start_tv,NULL);
@@ -77,11 +77,9 @@ int main(int argc, char **argv) {
   unsigned long inputString;
   long answer;
   printf("FUNCT: %d\n", funct);
-  print_stats();
 
   switch(funct) {
     case 0:
-      printf("000: %d\n", funct);
       inputString = (1L << WIDTH/2) - 1;
       long lookups1[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
       answer = lookups1[WIDTH];
@@ -101,14 +99,13 @@ int main(int argc, char **argv) {
 
   // Read in new ACCEL environemnt variable and reset HW or SW
   signal(SIGINT, sigintHandler);
-  printf("Signal setup\n");
   int testResult = 0;
   gettimeofday(&start_tv,NULL);
   start_time = start_tv.tv_sec%(24*3600);
-  printf("Hi!\n");
+
   while (1) {
       asm volatile ("fence");
-      for (num_loops = 0; num_loops < 1000; num_loops++) {
+      for (int i = 0; i < 1000; i++) {
 	      testResult = generate(inputString, WIDTH, answer, funct);
       }
       asm volatile ("fence");
