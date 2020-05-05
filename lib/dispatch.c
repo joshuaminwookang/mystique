@@ -13,8 +13,8 @@
 #include <sys/time.h>
 #include <sys/sysinfo.h>
 
-extern static inline int generate_sw(unsigned int inputString, int length, long answer, int funct);
-extern static inline int generate_hw(unsigned int inputString, int length, long answer, int funct);
+extern inline int generate_sw(unsigned int inputString, int length, long answer, int funct);
+extern inline int generate_hw(unsigned int inputString, int length, long answer, int funct);
 
 // static inline int generate_sw(unsigned int inputString, int length, long answer) {
 //     int outputString, outputs;
