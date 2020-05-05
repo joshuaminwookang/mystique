@@ -1,5 +1,4 @@
 #ifndef DISPATCH_H
-
 #define DISPATCH_H
 // Metadata for each HW accelerator (possible)
 typedef struct accMeta {
