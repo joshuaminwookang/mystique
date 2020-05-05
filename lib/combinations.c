@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
   gettimeofday(&start_tv,NULL);
   start_time = start_tv.tv_sec%(24*3600);
   
-  switch (func){
+  switch (funct){
     case 0:
       while (1) {
         asm volatile ("fence");
@@ -143,7 +143,7 @@ int main(int argc, char **argv) {
   gettimeofday(&end_tv,NULL);
   end_time = end_tv.tv_sec%(24*3600);
   printf("\n Results for FUNCT: %d with ACCEL: %d \n Elapsed ops count: %lld\n Elapsed Time: %ld seconds\n",
-	 FUNCT, ShellWantsHW,num_loops, end_time-start_time);
+	 funct, ShellWantsHW,num_loops, end_time-start_time);
   fflush(stdout);
   
   testResult -= answer;
