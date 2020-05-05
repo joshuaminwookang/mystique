@@ -12,7 +12,7 @@
 #include <sys/sysinfo.h>
 
 #define WIDTH 16
-#define FUNCT 0
+#define FUNCT 2
 
 /* Global loop count variable*/
 unsigned long long num_loops = 0;
@@ -76,28 +76,31 @@ int main(void) {
   unsigned long inputString;
   long answer;
   printf("FUNCT: %d\n", FUNCT);
-
   print_stats();
 
-  switch(FUNCT) {
-    case 0:
-      printf("000: %d\n", FUNCT);
-      inputString = (1L << WIDTH/2) - 1;
-      long lookups1[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
-      answer = lookups1[WIDTH];
-      break;
-    case 1:
-      inputString = (1L << WIDTH) - 1;
-      answer = 1L << WIDTH;
-      break;
-    case 2:
-      inputString = 0;
-      long lookups2[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
-      answer = lookups2[WIDTH];
-      break;
-    default:
-      break;
-  }
+  // switch(FUNCT) {
+  //   case 0:
+  //     printf("000: %d\n", FUNCT);
+  //     inputString = (1L << WIDTH/2) - 1;
+  //     long lookups1[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
+  //     answer = lookups1[WIDTH];
+  //     break;
+  //   case 1:
+  //     inputString = (1L << WIDTH) - 1;
+  //     answer = 1L << WIDTH;
+  //     break;
+  //   case 2:
+  //     inputString = 0;
+  //     long lookups2[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
+  //     answer = lookups2[WIDTH];
+  //     break;
+  //   default:
+  //     break;
+  // }
+
+  inputString = 0;
+  long lookups2[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
+  answer = lookups2[WIDTH];
 
   // Read in new ACCEL environemnt variable and reset HW or SW
   signal(SIGINT, sigintHandler);
