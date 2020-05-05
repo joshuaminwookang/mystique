@@ -65,7 +65,6 @@ extern int initDNA();
 extern int generate(unsigned int, int, long);
 extern int ShellWantsHW;
 
-
 int main(void) {
 //int main(int argc, char **argv) {
   //  if (argc > 1) FUNCT = atoi(argv[1]); 
@@ -113,7 +112,7 @@ int main(void) {
       asm volatile ("fence");
       printf("Num loops %lld", num_loops);
       for (num_loops = 0; num_loops < 1000; num_loops++) {
-	      testResult = generate(inputString, WIDTH, answer, FUNCT);
+	      testResult = generate(inputString, WIDTH, answer);
       }
       asm volatile ("fence");
       num_loops++;
