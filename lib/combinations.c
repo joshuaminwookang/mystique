@@ -4,6 +4,7 @@
 #include "rocc.h"
 #include "encoding.h"
 #include "dispatch.h"
+#include "combinations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,7 +48,7 @@ void sigintHandler(int dummy)
   
   /* Reset handler to catch SIGINT next time. */
   printf("\n Switching gears!\n Results for function: %d with ACCEL: %d \n Elapsed ops count: %lld\n Elapsed Time: %ld seconds\n",
-	   2, ShellWantsHW,num_loops, end_time-start_time);
+	   function, ShellWantsHW,num_loops, end_time-start_time);
   fflush(stdout);
   //  initDNA();
   //  gettimeofday(&start_tv,NULL);
@@ -60,38 +61,45 @@ extern int initDNA();
 extern int generate(unsigned int, int, long);
 extern int ShellWantsHW;
 
-int main(void) {
+int main(int argc, char **argv) {
+  int function = 0;
+  if (argc > 1) function = atoi(argv[1]); 
   // initialize DNA vector
   if(initDNA() < 0) exit(1);
 
   printf("DNA init completed\n");
-  print_stats();
-  //    long startCycle, endCycle;
-    //Set input string and the expected number of combinations
+  //print_stats();
   
-  unsigned long inputString = 0;
-  long lookups[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
-  long answer = lookups[WIDTH];
-    
-  //printf("answer %lu, input %lu \n", answer, inputString);
-  //Set the string's length
-  int length = WIDTH;
+  switch(function) {
+    case 0:
+      unsigned long inputString = (1L << WIDTH/2) - 1;
+      long lookups[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
+      long answer = lookups[WIDTH];
+      break;
+    case 1:
+      unsigned long inputString = (1L << WIDTH) - 1;
+      long answer = 1L << WIDTH;
+      break;
+    case 2:
+      unsigned long inputString = 0;
+      long lookups[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
+      long answer = lookups[WIDTH];
+      break;
+    default:
+      break;
+  }
+
   // Read in new ACCEL environemnt variable and reset HW or SW
   signal(SIGINT, sigintHandler);
   
   int testResult = 0;
   gettimeofday(&start_tv,NULL);
   start_time = start_tv.tv_sec%(24*3600);
-  /* asm volatile ("fence"); */
-  /* for (num_loops = 0; num_loops < 100000; num_loops++) { */
-  /*   testResult = generate_hw(inputString, length, answer); */
-  /* } */
-  /* asm volatile ("fence"); */
 
   while (1) {
       asm volatile ("fence");
       for (num_loops = 0; num_loops < 1000; num_loops++) {
-	testResult = generate(inputString, length, answer);
+	      testResult = generate(inputString, WIDTH, answer);
       }
       asm volatile ("fence");
       num_loops++;
@@ -100,7 +108,7 @@ int main(void) {
   gettimeofday(&end_tv,NULL);
   end_time = end_tv.tv_sec%(24*3600);
   printf("\n Results for function: %d with ACCEL: %d \n Elapsed ops count: %lld\n Elapsed Time: %ld seconds\n",
-	 2, ShellWantsHW,num_loops, end_time-start_time);
+	 function, ShellWantsHW,num_loops, end_time-start_time);
   fflush(stdout);
   
   testResult -= answer;

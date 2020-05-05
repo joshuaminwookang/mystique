@@ -5,6 +5,7 @@
 #include "rocc.h"
 #include "encoding.h"
 #include "dispatch.h"
+#include "combinations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,68 +13,34 @@
 #include <sys/time.h>
 #include <sys/sysinfo.h>
 
-/* A function to help generate all binary strings of a certain length and weight range
- * The generation is computed using the cool-est pattern from "The Coolest
- * Way to Generate Binary Strings"
- */
-int nextRangedCombination(int n, int last, int min, int max, int *out) {
-  unsigned int cut, trimmed, trailed, mask, lastTemp, lastLimit, lastPosition, disposable, count, cap, flipped, valid, first, shifted, rotated, result;
-    cut = last >> 1;
-    trimmed = cut | (cut - 1); //Discards trailing zeros
-    trailed = trimmed ^ (trimmed + 1); //Marks the start of the last "01"
-    mask = (trailed << 1) + 1;
+extern static inline int generate_sw(unsigned int inputString, int length, long answer, int funct);
+extern static inline int generate_hw(unsigned int inputString, int length, long answer, int funct);
 
-    lastTemp = trailed + 1; //Indexes the start of the last "01"
-    lastLimit = 1 << (n-1); //Indexes the length of the string
-    lastPosition = (lastTemp == 0 || lastTemp > lastLimit)? lastLimit : lastTemp;
+// static inline int generate_sw(unsigned int inputString, int length, long answer) {
+//     int outputString, outputs;
+//     outputs = 1;
+//     while( nextRangedCombination(length, inputString, 0, WIDTH/2, &outputString)!= -1) {
+//     	inputString = outputString;
+// 	    //printf("%d \n", outputString);
+// 	    outputs++;
+//     }
+//     return outputs;
+// }
 
-    disposable = last; //Prepare to count bits set in the string
-    for(count = 0; disposable; count++) {
-        disposable = disposable & (disposable - 1); //Discard the last bit set
-    }
+// static inline int  generate_hw (unsigned int inputString, int length, long answer) {
+//     unsigned int outputString, outputs;
 
-o    cap = 1 << n;
-    flipped = 1 & ~last;
-    valid = (flipped == 0)? count > min : count < max;
-    first = (mask < cap || !valid)? 1 & last : flipped; //The bit to be moved
-    shifted = cut & trailed;
-    rotated = (first == 1)? shifted | lastPosition : shifted;
-    result = rotated | (~mask & last);
-
-    cap = (1 << min) - 1;
-    if(result == cap) {
-        return -1;
-    }
-
-    *out = result;
-    return 1;
-}
-
-static inline int generate_sw(unsigned int inputString, int length, long answer) {
-    int outputString, outputs;
-    outputs = 1;
-    while( nextRangedCombination(length, inputString, 0, WIDTH/2, &outputString)!= -1) {
-    	inputString = outputString;
-	    //printf("%d \n", outputString);
-	    outputs++;
-    }
-    return outputs;
-}
-
-static inline int  generate_hw (unsigned int inputString, int length, long answer) {
-    unsigned int outputString, outputs;
-
-    outputs = 1;
-    length |= (0 << 6) |  ((WIDTH/2) << 12);
-    ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, 2);
-    while(outputString != -1) {
-	  //printf("%d \n", outputString);
-	  inputString = outputString;
-  	outputs++;
-      ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, 2);
-    }
-    return outputs;
-}
+//     outputs = 1;
+//     length |= (0 << 6) |  ((WIDTH/2) << 12);
+//     ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, 2);
+//     while(outputString != -1) {
+// 	  //printf("%d \n", outputString);
+// 	  inputString = outputString;
+//   	outputs++;
+//       ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, 2);
+//     }
+//     return outputs;
+// }
 
 
 // DNA vector declaration
@@ -90,9 +57,7 @@ extern int useSW(int);
 extern int shellMediatedHW(int);
 heurFun_t heuristic = &useHWDynamically;
 
-
 // static timer global_timer;
-
 
 // Top level "dispatch" functions for each accelerator
 int generate (unsigned int inputString, int length, long answer) {

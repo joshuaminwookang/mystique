@@ -9,9 +9,7 @@ typedef struct accMeta {
   void (*sw_fun)();
   int hw_avail; // 1 if accelerator is built-in (available)
   int hw_on; // 1 if accelerator is turned-on (set to be used)
-  //	int calls ; // # of calls
-  /*ToDO: is there gonna be a size_penaltiy of turning on the HW */
-  //int size_penalty;
+  int calls ; // # of calls
   int speed_reward;
   int power_reward;
   // other data and metrics to make judgements about hw vs sw
@@ -29,9 +27,13 @@ extern int ShellWantsHW;
 extern int initDNA();
 
 // list of accelerator dispatch functions
-#define GENERATE 0
+#define BLOOM 0
+extern int bloom(unsigned int, int, long);
+#define GENERATE 1
 extern int generate(unsigned int, int, long);
-#define STRCMP   1
+#define STRCPY   2
+extern int wstrcpy(char *, char*);
+#define STRCMP   3
 extern int wstrcmp(char *, char*);
 
 #define NACC 1 // number of accelerators
