@@ -73,9 +73,11 @@ int main(int argc, char **argv) {
   /* set test env */
   unsigned long inputString;
   long answer;
+  printf("Function: %d\n", function);
 
   switch(function) {
     case 0:
+      printf("000: %d\n", function);
       inputString = (1L << WIDTH/2) - 1;
       long lookups1[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
       answer = lookups1[WIDTH];
