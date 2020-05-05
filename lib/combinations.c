@@ -99,13 +99,15 @@ int main(int argc, char **argv) {
 
   // Read in new ACCEL environemnt variable and reset HW or SW
   signal(SIGINT, sigintHandler);
+  int limit = 10;
+  if(ShellWantsHW) limit = 100;
   int testResult = 0;
   gettimeofday(&start_tv,NULL);
   start_time = start_tv.tv_sec%(24*3600);
 
   while (1) {
       asm volatile ("fence");
-      for (int i = 0; i < 1000; i++) {
+      for (int i = 0; i < limit; i++) {
 	      testResult = generate(inputString, WIDTH, answer, funct);
       }
       asm volatile ("fence");
