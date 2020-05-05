@@ -1,5 +1,7 @@
 #define LONGTOP 0x8000000000000000
 #define WIDTH 16
+#include "rocc.h"
+#include "encoding.h"
 /* A function to help generate all binary strings of a certain weight.
  * Input the length of the binary string and the previous combination.
  * The pointer, out, will be loaded with the next combination following
