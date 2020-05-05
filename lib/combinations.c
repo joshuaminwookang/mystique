@@ -104,6 +104,7 @@ int main(int argc, char **argv) {
 
   while (1) {
       asm volatile ("fence");
+      printf("Num loops %lld", num_loops);
       for (num_loops = 0; num_loops < 1000; num_loops++) {
 	      testResult = generate(inputString, WIDTH, answer, function);
       }
