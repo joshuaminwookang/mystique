@@ -33,11 +33,11 @@ heurFun_t heuristic = &useHWDynamically;
 // static timer global_timer;
 
 // Top level "dispatch" functions for each accelerator
-int generate (unsigned int inputString, int length, long answer) {
+int generate (unsigned int inputString, int length, long answer, int funct) {
   if (DNA[GENERATE].hw_on)
-    return ((int (*) ()) DNA[GENERATE].hw_fun)(inputString, length, answer);
+    return ((int (*) ()) DNA[GENERATE].hw_fun)(inputString, length, answer, funct);
   else
-    return ((int (*) ()) DNA[GENERATE].sw_fun)(inputString, length, answer);
+    return ((int (*) ()) DNA[GENERATE].sw_fun)(inputString, length, answer, funct);
   //  return generate_hw(inputString, length, answer);
 }
 
