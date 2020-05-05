@@ -215,12 +215,12 @@ static inline int  generate0_hw (unsigned int inputString, int length, long answ
 
     length |= (WIDTH/2) << 6;
 
-    ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, FUNCT);
+    ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 0);
     while(outputString != -1) {
 	    //printf("%d \n", outputString);
 	    inputString = outputString;
 	    outputs++;
-      ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, FUNCT);
+      ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 0);
     } 
     return outputs;
 }
@@ -242,12 +242,12 @@ static inline int  generate1_hw (unsigned int inputString, int length, long answ
     unsigned int outputString, outputs;
     outputs = 1;
 
-    ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, FUNCT);
+    ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, 1);
     while(outputString != -1) {
 	    //printf("%d \n", outputString);
 	    inputString = outputString;
 	    outputs++;
-      ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, FUNCT);
+      ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 1);
     } 
     return outputs;
 }
