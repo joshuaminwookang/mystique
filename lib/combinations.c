@@ -11,18 +11,15 @@
 #include <sys/time.h>
 #include <sys/sysinfo.h>
 
+#define WIDTH 16
+#define FUNCT 0
+
 /* Global loop count variable*/
 unsigned long long num_loops = 0;
 struct timeval start_tv,end_tv;
 long start_time, end_time;
 
-/* Function declarations*/
-extern int initDNA();
-extern int generate(unsigned int, int, long, int);
-extern int ShellWantsHW;
-
 /* Global combinations function variable*/
-int function;
 
 void print_stats(){
   /* Conversion constants. */
@@ -55,7 +52,7 @@ void sigintHandler(int dummy)
   
   /* Reset handler to catch SIGINT next time. */
   printf("\n Switching gears!\n Results for function: %d with ACCEL: %d \n Elapsed ops count: %lld\n Elapsed Time: %ld seconds\n",
-	   function, ShellWantsHW,num_loops, end_time-start_time);
+	   0, ShellWantsHW,num_loops, end_time-start_time);
   fflush(stdout);
   //  initDNA();
   //  gettimeofday(&start_tv,NULL);
@@ -63,21 +60,28 @@ void sigintHandler(int dummy)
   exit(0);
 } 
 
+/* FUNCT declarations*/
+extern int initDNA();
+extern int generate(unsigned int, int, long, int);
+extern int ShellWantsHW;
 
-int main(int argc, char **argv) {
-  function = 0;
-  if (argc > 1) function = atoi(argv[1]); 
+
+int main(void) {
+//int main(int argc, char **argv) {
+  //  if (argc > 1) FUNCT = atoi(argv[1]); 
   if(initDNA() < 0) exit(1);
   printf("DNA init completed\n");
   
   /* set test env */
   unsigned long inputString;
   long answer;
-  printf("Function: %d\n", function);
+  printf("FUNCT: %d\n", FUNCT);
 
-  switch(function) {
+  print_stats();
+
+  switch(FUNCT) {
     case 0:
-      printf("000: %d\n", function);
+      printf("000: %d\n", FUNCT);
       inputString = (1L << WIDTH/2) - 1;
       long lookups1[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
       answer = lookups1[WIDTH];
@@ -97,16 +101,16 @@ int main(int argc, char **argv) {
 
   // Read in new ACCEL environemnt variable and reset HW or SW
   signal(SIGINT, sigintHandler);
-  
+  printf("Signal setup\n");
   int testResult = 0;
   gettimeofday(&start_tv,NULL);
   start_time = start_tv.tv_sec%(24*3600);
-
+  printf("Hi!\n");
   while (1) {
       asm volatile ("fence");
       printf("Num loops %lld", num_loops);
       for (num_loops = 0; num_loops < 1000; num_loops++) {
-	      testResult = generate(inputString, WIDTH, answer, function);
+	      testResult = generate(inputString, WIDTH, answer, FUNCT);
       }
       asm volatile ("fence");
       num_loops++;
@@ -114,8 +118,8 @@ int main(int argc, char **argv) {
 
   gettimeofday(&end_tv,NULL);
   end_time = end_tv.tv_sec%(24*3600);
-  printf("\n Results for function: %d with ACCEL: %d \n Elapsed ops count: %lld\n Elapsed Time: %ld seconds\n",
-	 function, ShellWantsHW,num_loops, end_time-start_time);
+  printf("\n Results for FUNCT: %d with ACCEL: %d \n Elapsed ops count: %lld\n Elapsed Time: %ld seconds\n",
+	 FUNCT, ShellWantsHW,num_loops, end_time-start_time);
   fflush(stdout);
   
   testResult -= answer;
