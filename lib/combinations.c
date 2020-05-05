@@ -18,7 +18,7 @@ long start_time, end_time;
 
 /* Function declarations*/
 extern int initDNA();
-extern int generate(unsigned int, int, long);
+extern int generate(unsigned int, int, long, int);
 extern int ShellWantsHW;
 
 /* Global combinations function variable*/
