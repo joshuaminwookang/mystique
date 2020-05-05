@@ -102,7 +102,7 @@ int nextRangedCombination(long n, unsigned long last, long min, long max, unsign
 }
 
 // generate sw
-inline int generate_sw(unsigned int inputString, int length, long answer, int funct) {
+static inline int generate_sw(unsigned int inputString, int length, long answer, int funct) {
     unsigned int outputString, outputs;
     outputs = 1;
     switch(funct) {
@@ -143,7 +143,7 @@ inline int generate_sw(unsigned int inputString, int length, long answer, int fu
     return outputs;
 }
 
-inline int  generate_hw (unsigned int inputString, int length, long answer, int funct) {
+static inline int  generate_hw (unsigned int inputString, int length, long answer, int funct) {
     unsigned int outputString, outputs;
     outputs = 1;
 
