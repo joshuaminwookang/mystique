@@ -16,33 +16,6 @@
 extern inline int generate_sw(unsigned int inputString, int length, long answer, int funct);
 extern inline int generate_hw(unsigned int inputString, int length, long answer, int funct);
 
-// static inline int generate_sw(unsigned int inputString, int length, long answer) {
-//     int outputString, outputs;
-//     outputs = 1;
-//     while( nextRangedCombination(length, inputString, 0, WIDTH/2, &outputString)!= -1) {
-//     	inputString = outputString;
-// 	    //printf("%d \n", outputString);
-// 	    outputs++;
-//     }
-//     return outputs;
-// }
-
-// static inline int  generate_hw (unsigned int inputString, int length, long answer) {
-//     unsigned int outputString, outputs;
-
-//     outputs = 1;
-//     length |= (0 << 6) |  ((WIDTH/2) << 12);
-//     ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, 2);
-//     while(outputString != -1) {
-// 	  //printf("%d \n", outputString);
-// 	  inputString = outputString;
-//   	outputs++;
-//       ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, 2);
-//     }
-//     return outputs;
-// }
-
-
 // DNA vector declaration
 accMeta DNA[NACC] =
 {
