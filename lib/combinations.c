@@ -17,6 +17,14 @@ unsigned long long num_loops = 0;
 struct timeval start_tv,end_tv;
 long start_time, end_time;
 
+/* Function declarations*/
+extern int initDNA();
+extern int generate(unsigned int, int, long);
+extern int ShellWantsHW;
+
+/* Global combinations function variable*/
+int function;
+
 void print_stats(){
   /* Conversion constants. */
   const long minute = 60;
@@ -57,33 +65,31 @@ void sigintHandler(int dummy)
 } 
 
 
-extern int initDNA();
-extern int generate(unsigned int, int, long);
-extern int ShellWantsHW;
-
 int main(int argc, char **argv) {
-  int function = 0;
+  function = 0;
   if (argc > 1) function = atoi(argv[1]); 
-  // initialize DNA vector
   if(initDNA() < 0) exit(1);
-
   printf("DNA init completed\n");
-  //print_stats();
   
+  /* set test env */
+  unsigned long inputString;
+  long lookups[];
+  long answer;
+
   switch(function) {
     case 0:
-      unsigned long inputString = (1L << WIDTH/2) - 1;
-      long lookups[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
-      long answer = lookups[WIDTH];
+      inputString = (1L << WIDTH/2) - 1;
+      lookups[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
+      answer = lookups[WIDTH];
       break;
     case 1:
-      unsigned long inputString = (1L << WIDTH) - 1;
-      long answer = 1L << WIDTH;
+      inputString = (1L << WIDTH) - 1;
+      answer = 1L << WIDTH;
       break;
     case 2:
-      unsigned long inputString = 0;
-      long lookups[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
-      long answer = lookups[WIDTH];
+      inputString = 0;
+      lookups[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
+      answer = lookups[WIDTH];
       break;
     default:
       break;

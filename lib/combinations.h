@@ -134,20 +134,35 @@ static inline int  generate_hw (unsigned int inputString, int length, long answe
     switch(funct) {
         case 0: 
             length |= (WIDTH/2) << 6;
+            ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 0);
+            while(outputString != -1) {
+	            //printf("%d \n", outputString);
+	            inputString = outputString;
+	            outputs++;
+                 ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 0);
+            }
             break;
+        case 1:
+            ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 1);
+            while(outputString != -1) {
+	            //printf("%d \n", outputString);
+	            inputString = outputString;
+	            outputs++;
+                 ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 1);
+            }      
+            break;     
         case 2:
             length |= (0 << 6) |  ((WIDTH/2) << 12);
+            ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 2);
+            while(outputString != -1) {
+	            //printf("%d \n", outputString);
+	            inputString = outputString;
+	            outputs++;
+                 ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 2);
+            }
             break;
         default:
             break;
-    }
-
-    ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, funct);
-    while(outputString != -1) {
-	//printf("%d \n", outputString);
-	inputString = outputString;
-	outputs++;
-        ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, funct);
     }
     return outputs;
 }
