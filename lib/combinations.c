@@ -62,7 +62,7 @@ void sigintHandler(int dummy)
 
 /* FUNCT declarations*/
 extern int initDNA();
-extern int generate(unsigned int, int, long, int);
+extern int generate(unsigned int, int, long);
 extern int ShellWantsHW;
 
 
