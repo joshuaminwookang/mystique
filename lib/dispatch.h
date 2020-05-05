@@ -30,7 +30,7 @@ extern int initDNA();
 #define BLOOM 0
 extern int bloom(unsigned int, int, long);
 #define GENERATE 1
-extern int generate(unsigned int, int, long);
+extern int generate(unsigned int, int, long, int);
 #define STRCPY   2
 extern int wstrcpy(char *, char*);
 #define STRCMP   3
