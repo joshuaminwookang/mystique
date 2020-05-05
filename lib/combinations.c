@@ -4,7 +4,6 @@
 #include "rocc.h"
 #include "encoding.h"
 #include "dispatch.h"
-#include "combinations.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
