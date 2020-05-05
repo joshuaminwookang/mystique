@@ -12,7 +12,6 @@
 #include <sys/sysinfo.h>
 
 #define WIDTH 16
-#define FUNCT 2
 
 /* Global loop count variable*/
 unsigned long long num_loops = 0;
@@ -63,7 +62,9 @@ void sigintHandler(int dummy)
 
 /* FUNCT declarations*/
 extern int initDNA();
-extern int generate(unsigned int, int, long, int);
+extern int generate0(unsigned int, int, long);
+extern int generate1(unsigned int, int, long);
+extern int generate2(unsigned int, int, long);
 extern int ShellWantsHW;
 
 
@@ -104,15 +105,40 @@ int main(int argc, char **argv) {
   int testResult = 0;
   gettimeofday(&start_tv,NULL);
   start_time = start_tv.tv_sec%(24*3600);
-
-  while (1) {
-      asm volatile ("fence");
-      for (int i = 0; i < limit; i++) {
-	      testResult = generate(inputString, WIDTH, answer, funct);
-      }
-      asm volatile ("fence");
-      num_loops++;
-    }
+  
+  switch (func){
+    case 0:
+      while (1) {
+        asm volatile ("fence");
+        for (int i = 0; i < limit; i++) {
+	        testResult = generate0(inputString, WIDTH, answer);
+        }
+        asm volatile ("fence");
+        num_loops++;
+      } 
+      break;
+    case 1:
+      while (1) {
+        asm volatile ("fence");
+        for (int i = 0; i < limit; i++) {
+	        testResult = generate1(inputString, WIDTH, answer);
+        }
+        asm volatile ("fence");
+        num_loops++;
+      } 
+      break;
+    case 2: 
+      while (1) {
+        asm volatile ("fence");
+        for (int i = 0; i < limit; i++) {
+	        testResult = generate2(inputString, WIDTH, answer);
+        }
+        asm volatile ("fence");
+        num_loops++;
+      } 
+      break;
+  }
+  
 
   gettimeofday(&end_tv,NULL);
   end_time = end_tv.tv_sec%(24*3600);

@@ -19,7 +19,9 @@
 // DNA vector declaration
 accMeta DNA[NACC] =
 {
-    ACCEL(GENERATE,0, generate_hw, generate_sw)
+    ACCEL(GENERATE0,1, generate0_hw, generate0_sw)
+    ACCEL(GENERATE1,1, generate1_hw, generate1_sw)
+    ACCEL(GENERATE2,1, generate2_hw, generate2_sw)
     //ACCEL(STRCMP,1,strcmp_hw,strcmp_sw),    
 };
 
@@ -33,22 +35,33 @@ heurFun_t heuristic = &useHWDynamically;
 // static timer global_timer;
 
 // Top level "dispatch" functions for each accelerator
-int generate (unsigned int inputString, int length, long answer, int funct) {
-  if (DNA[GENERATE].hw_on)
-    return ((int (*) ()) DNA[GENERATE].hw_fun)(inputString, length, answer, funct);
+int generate0 (unsigned int inputString, int length, long answer) {
+  if (DNA[GENERATE0].hw_on)
+    return ((int (*) ()) DNA[GENERATE0].hw_fun)(inputString, length, answer);
   else
-    return ((int (*) ()) DNA[GENERATE].sw_fun)(inputString, length, answer, funct);
+    return ((int (*) ()) DNA[GENERATE0].sw_fun)(inputString, length, answer);
   //  return generate_hw(inputString, length, answer);
 }
 
-// // Top level "dispatch" functions for each accelerator
-// int generate (unsigned int inputString, int length, long answer, int funct) {
-//   if (DNA[GENERATE].hw_on)
-//     return ((int (*) ()) DNA[GENERATE].hw_fun)(inputString, length, answer, funct);
-//   else
-//     return ((int (*) ()) DNA[GENERATE].sw_fun)(inputString, length, answer, funct);
-//   //  return generate_hw(inputString, length, answer);
-// }
+// Top level "dispatch" functions for each accelerator
+int generate1 (unsigned int inputString, int length, long answer) {
+  if (DNA[GENERATE1].hw_on)
+    return ((int (*) ()) DNA[GENERATE1].hw_fun)(inputString, length, answer);
+  else
+    return ((int (*) ()) DNA[GENERATE1].sw_fun)(inputString, length, answer);
+  //  return generate_hw(inputString, length, answer);
+}
+
+// Top level "dispatch" functions for each accelerator
+int generate2 (unsigned int inputString, int length, long answer) {
+  if (DNA[GENERATE2].hw_on)
+    return ((int (*) ()) DNA[GENERATE2].hw_fun)(inputString, length, answer);
+  else
+    return ((int (*) ()) DNA[GENERATE2].sw_fun)(inputString, length, answer);
+  //  return generate_hw(inputString, length, answer);
+}
+
+
 
 // int wstrcmp (char *a, char *b) {
 //      if (heuristic(STRCMP))
@@ -60,7 +73,10 @@ int generate (unsigned int inputString, int length, long answer, int funct) {
 int initDNA()
 {
   DNAinitialized = 1;
-  DNA[GENERATE].hw_avail = 1;
+  DNA[GENERATE0].hw_avail = 1;
+  DNA[GENERATE1].hw_avail = 1;
+  DNA[GENERATE2].hw_avail = 1;
+
   //check shell environment variable (getenv) for HW/SW use decision set ShellWantsHW
   char* variable;
   if ((variable = getenv("ACCEL"))==NULL) {
@@ -68,20 +84,17 @@ int initDNA()
     exit(1);
   }
   ShellWantsHW = atoi(variable);
-  DNA[GENERATE].hw_on = ShellWantsHW;
+  DNA[GENERATE0].hw_on = ShellWantsHW;
+  DNA[GENERATE1].hw_on = ShellWantsHW;
+  DNA[GENERATE2].hw_on = ShellWantsHW;
+
   // record load statistics
   // set a timer to call initDNA again in a minute
   return 1;
 }
 
 int useHWDynamically (int vecNum) {
-  //if (!DNAinitialized) return initDNA();
   if (ShellWantsHW) return 1;
-    
-  /* if(DNA[vecNum].hw_avail) { */
-  /*   return 1; */
-  /* } */
-    // Heuristic decision function
   return 0; 
 }
 

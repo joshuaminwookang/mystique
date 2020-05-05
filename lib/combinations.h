@@ -3,7 +3,6 @@
 
 #define LONGTOP 0x8000000000000000
 #define WIDTH 16
-#define FUNCT 2
 
 /* A function to help generate all binary strings of a certain weight.
  * Input the length of the binary string and the previous combination.
@@ -101,97 +100,182 @@ int nextRangedCombination(long n, unsigned long last, long min, long max, unsign
     return 1;
 }
 
-// generate sw
-static inline int generate_sw(unsigned int inputString, int length, long answer, int funct) {
+// // generate sw
+// static inline int generate_sw(unsigned int inputString, int length, long answer) {
+//     unsigned int outputString, outputs;
+//     outputs = 1;
+//     // switch(funct) {
+//     //     case 0:
+//     //         while( nextWeightedCombination(length, inputString, &outputString) != -1) {
+// 	//             inputString = outputString;
+// 	//             outputs++;
+//     //         }
+//     //         break;
+//     //     case 1:
+//     //         while( nextGeneralCombination(length, inputString, &outputString) != -1) {
+// 	//             inputString = outputString;
+// 	//             outputs++;
+//     //         }
+//     //         break;
+//     //     case 2:
+//     //         while( nextRangedCombination(length, inputString, 0, WIDTH/2, &outputString) != -1) {
+// 	//             inputString = outputString;
+// 	//             outputs++;
+//     //         }
+//     //         break;
+//     //     default:
+//     //         break;
+//     //}
+//     while(
+// 	  #if FUNCT % 4 == 0
+// 	  nextWeightedCombination(length, inputString, &outputString)
+// 	  #elif FUNCT % 4 == 1
+// 	  nextGeneralCombination(length, inputString, &outputString)
+// 	  #else
+// 	  nextRangedCombination(length, inputString, 0, WIDTH/2, &outputString)
+//           #endif
+// 	  != -1) {
+// 	inputString = outputString;
+// 	//printf("%d \n", outputString);
+// 	outputs++;
+//     }
+//     return outputs;
+// }
+
+// static inline int  generate_hw (unsigned int inputString, int length, long answer) {
+//     unsigned int outputString, outputs;
+//     outputs = 1;
+
+//     #if FUNCT % 4 == 0
+//     length |= (WIDTH/2) << 6;
+//     #elif FUNCT % 4 == 2
+//     length |= (0 << 6) |  ((WIDTH/2) << 12);
+//     #endif
+
+//     ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, FUNCT);
+//     while(outputString != -1) {
+// 	    //printf("%d \n", outputString);
+// 	    inputString = outputString;
+// 	    outputs++;
+//       ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, FUNCT);
+//     } 
+//     // switch(funct) {
+//     //     case 0: 
+//     //         length |= (WIDTH/2) << 6;
+//     //         ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 0);
+//     //         while(outputString != -1) {
+// 	//             //printf("%d \n", outputString);
+// 	//             inputString = outputString;
+// 	//             outputs++;
+//     //              ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 0);
+//     //         }
+//     //         break;
+//     //     case 1:
+//     //         ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 1);
+//     //         while(outputString != -1) {
+// 	//             //printf("%d \n", outputString);
+// 	//             inputString = outputString;
+// 	//             outputs++;
+//     //              ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 1);
+//     //         }      
+//     //         break;     
+//     //     case 2:
+//     //         length |= (0 << 6) |  ((WIDTH/2) << 12);
+//     //         ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 2);
+//     //         while(outputString != -1) {
+// 	//             //printf("%d \n", outputString);
+// 	//             inputString = outputString;
+// 	//             outputs++;
+//     //              ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 2);
+//     //         }
+//     //         break;
+//     //     default:
+//     //         break;
+//     // }
+//     return outputs;
+// }
+
+// Weighted Combinations
+static inline int generate0_sw(unsigned int inputString, int length, long answer) {
     unsigned int outputString, outputs;
     outputs = 1;
-    switch(funct) {
-        case 0:
-            while( nextWeightedCombination(length, inputString, &outputString) != -1) {
-	            inputString = outputString;
-	            outputs++;
-            }
-            break;
-        case 1:
-            while( nextGeneralCombination(length, inputString, &outputString) != -1) {
-	            inputString = outputString;
-	            outputs++;
-            }
-            break;
-        case 2:
-            while( nextRangedCombination(length, inputString, 0, WIDTH/2, &outputString) != -1) {
-	            inputString = outputString;
-	            outputs++;
-            }
-            break;
-        default:
-            break;
+
+    while(
+	  nextWeightedCombination(length, inputString, &outputString)
+	  != -1) {
+	inputString = outputString;
+	outputs++;
     }
-  //   while(
-	//   #if FUNCT % 4 == 0
-	//   nextWeightedCombination(length, inputString, &outputString)
-	//   #elif FUNCT % 4 == 1
-	//   nextGeneralCombination(length, inputString, &outputString)
-	//   #else
-	//   nextRangedCombination(length, inputString, 0, WIDTH/2, &outputString)
-  //         #endif
-	//   != -1) {
-	// inputString = outputString;
-	// //printf("%d \n", outputString);
-	// outputs++;
-  //   }
     return outputs;
 }
 
-static inline int  generate_hw (unsigned int inputString, int length, long answer, int funct) {
+static inline int  generate0_hw (unsigned int inputString, int length, long answer) {
     unsigned int outputString, outputs;
     outputs = 1;
 
-    // #if FUNCT % 4 == 0
-    // length |= (WIDTH/2) << 6;
-    // #elif FUNCT % 4 == 2
-    // length |= (0 << 6) |  ((WIDTH/2) << 12);
-    // #endif
+    length |= (WIDTH/2) << 6;
 
-    // ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, FUNCT);
-    // while(outputString != -1) {
-	  //   //printf("%d \n", outputString);
-	  //   inputString = outputString;
-	  //   outputs++;
-    //   ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, FUNCT);
-    // } 
-    switch(funct) {
-        case 0: 
-            length |= (WIDTH/2) << 6;
-            ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 0);
-            while(outputString != -1) {
-	            //printf("%d \n", outputString);
-	            inputString = outputString;
-	            outputs++;
-                 ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 0);
-            }
-            break;
-        case 1:
-            ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 1);
-            while(outputString != -1) {
-	            //printf("%d \n", outputString);
-	            inputString = outputString;
-	            outputs++;
-                 ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 1);
-            }      
-            break;     
-        case 2:
-            length |= (0 << 6) |  ((WIDTH/2) << 12);
-            ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 2);
-            while(outputString != -1) {
-	            //printf("%d \n", outputString);
-	            inputString = outputString;
-	            outputs++;
-                 ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 2);
-            }
-            break;
-        default:
-            break;
+    ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, FUNCT);
+    while(outputString != -1) {
+	    //printf("%d \n", outputString);
+	    inputString = outputString;
+	    outputs++;
+      ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, FUNCT);
+    } 
+    return outputs;
+}
+
+// generate sw
+static inline int generate1_sw(unsigned int inputString, int length, long answer) {
+    unsigned int outputString, outputs;
+    outputs = 1;
+
+    while(nextGeneralCombination(length, inputString, &outputString) != -1) {
+	inputString = outputString;
+	//printf("%d \n", outputString);
+	outputs++;
+    }
+    return outputs;
+}
+
+static inline int  generate1_hw (unsigned int inputString, int length, long answer) {
+    unsigned int outputString, outputs;
+    outputs = 1;
+
+    ROCC_INSTRUCTION_DSS(0, outputString, length, inputString, FUNCT);
+    while(outputString != -1) {
+	    //printf("%d \n", outputString);
+	    inputString = outputString;
+	    outputs++;
+      ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, FUNCT);
+    } 
+    return outputs;
+}
+
+// RANGED COMBINATIONS
+static inline int generate2_sw(unsigned int inputString, int length, long answer) {
+    unsigned int outputString, outputs;
+    outputs = 1;
+
+    while(nextRangedCombination(length, inputString, 0, WIDTH/2, &outputString)
+	  != -1) {
+	inputString = outputString;
+	outputs++;
+    }
+    return outputs;
+}
+
+static inline int  generate2_hw (unsigned int inputString, int length, long answer) {
+    unsigned int outputString, outputs;
+    outputs = 1;
+
+    length |= (0 << 6) |  ((WIDTH/2) << 12);
+    ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 2);
+    while(outputString != -1) {
+	    //printf("%d \n", outputString);
+	    inputString = outputString;
+	    outputs++;
+        ROCC_INSTRUCTION_DSS(1, outputString, length, inputString, 2);
     }
     return outputs;
 }
