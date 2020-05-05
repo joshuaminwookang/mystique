@@ -73,14 +73,13 @@ int main(int argc, char **argv) {
   
   /* set test env */
   unsigned long inputString;
-  long lookups[];
   long answer;
 
   switch(function) {
     case 0:
       inputString = (1L << WIDTH/2) - 1;
-      lookups[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
-      answer = lookups[WIDTH];
+      long lookups1[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
+      answer = lookups1[WIDTH];
       break;
     case 1:
       inputString = (1L << WIDTH) - 1;
@@ -88,8 +87,8 @@ int main(int argc, char **argv) {
       break;
     case 2:
       inputString = 0;
-      lookups[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
-      answer = lookups[WIDTH];
+      long lookups2[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
+      answer = lookups2[WIDTH];
       break;
     default:
       break;
