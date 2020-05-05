@@ -44,7 +44,7 @@ extern int generate2(unsigned int, int, long);
 // #define STRCMP   3
 // extern int wstrcmp(char *, char*);
 
-#define NACC 1 // number of accelerators
+#define NACC 3 // number of accelerators
 
 // different declarations of the heuristic function
 typedef int (*heurFun_t)(int);
