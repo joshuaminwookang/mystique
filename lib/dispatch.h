@@ -31,10 +31,10 @@ extern int initDNA();
 extern int generate0(unsigned int, int, long);
 
 #define GENERATE1 1
-extern int generate0(unsigned int, int, long);
+extern int generate1(unsigned int, int, long);
 
 #define GENERATE2 2
-extern int generate0(unsigned int, int, long);
+extern int generate2(unsigned int, int, long);
 
 // #define BLOOM 1
 // extern int bloom(unsigned int, int, long);
