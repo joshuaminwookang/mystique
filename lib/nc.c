@@ -20,6 +20,7 @@ struct timeval start_tv,end_tv;
 long start_time, end_time;
 
 /* Global combinations function variable*/
+int funct;
 
 void print_stats(){
   /* Conversion constants. */
@@ -52,7 +53,7 @@ void sigintHandler(int dummy)
   
   /* Reset handler to catch SIGINT next time. */
   printf("\n Switching gears!\n Results for function: %d with ACCEL: %d \n Elapsed ops count: %lld\n Elapsed Time: %ld seconds\n",
-	   0, ShellWantsHW,num_loops, end_time-start_time);
+	   funct, ShellWantsHW,num_loops, end_time-start_time);
   fflush(stdout);
   //  initDNA();
   //  gettimeofday(&start_tv,NULL);
@@ -62,44 +63,41 @@ void sigintHandler(int dummy)
 
 /* FUNCT declarations*/
 extern int initDNA();
-extern int generate(unsigned int, int, long);
+extern int generate(unsigned int, int, long, int);
 extern int ShellWantsHW;
 
-int main(void) {
-//int main(int argc, char **argv) {
-  //  if (argc > 1) FUNCT = atoi(argv[1]); 
+
+int main(int argc, char **argv) {
+  fucnt = 0;
+  if (argc > 1) funct = atoi(argv[1]); 
   if(initDNA() < 0) exit(1);
   printf("DNA init completed\n");
   
   /* set test env */
   unsigned long inputString;
   long answer;
-  printf("FUNCT: %d\n", FUNCT);
+  printf("FUNCT: %d\n", funct);
   print_stats();
 
-  // switch(FUNCT) {
-  //   case 0:
-  //     printf("000: %d\n", FUNCT);
-  //     inputString = (1L << WIDTH/2) - 1;
-  //     long lookups1[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
-  //     answer = lookups1[WIDTH];
-  //     break;
-  //   case 1:
-  //     inputString = (1L << WIDTH) - 1;
-  //     answer = 1L << WIDTH;
-  //     break;
-  //   case 2:
-  //     inputString = 0;
-  //     long lookups2[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
-  //     answer = lookups2[WIDTH];
-  //     break;
-  //   default:
-  //     break;
-  // }
-
-  inputString = 0;
-  long lookups2[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
-  answer = lookups2[WIDTH];
+  switch(funct) {
+    case 0:
+      printf("000: %d\n", funct);
+      inputString = (1L << WIDTH/2) - 1;
+      long lookups1[] = {0,0, 2, 0, 6, 0, 20, 0, 70, 0,0,0,0, 1716, 3432,0, 12870,0,0,0, 184756,0,0,0, 2704156,0,0,0,0,0,0,0,601080390};
+      answer = lookups1[WIDTH];
+      break;
+    case 1:
+      inputString = (1L << WIDTH) - 1;
+      answer = 1L << WIDTH;
+      break;
+    case 2:
+      inputString = 0;
+      long lookups2[] = {0,0, 3, 0, 11, 0, 42, 0, 163, 0,0,0,0, 4096, 9908,0, 39203,0,0,0, 616666,0,0,0, 9740686,0,0,0,0,0,0,0, 2448023843};
+      answer = lookups2[WIDTH];
+      break;
+    default:
+      break;
+  }
 
   // Read in new ACCEL environemnt variable and reset HW or SW
   signal(SIGINT, sigintHandler);
@@ -110,9 +108,8 @@ int main(void) {
   printf("Hi!\n");
   while (1) {
       asm volatile ("fence");
-      printf("Num loops %lld", num_loops);
       for (num_loops = 0; num_loops < 1000; num_loops++) {
-	      testResult = generate(inputString, WIDTH, answer);
+	      testResult = generate(inputString, WIDTH, answer, funct);
       }
       asm volatile ("fence");
       num_loops++;

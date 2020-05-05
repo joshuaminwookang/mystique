@@ -27,10 +27,10 @@ extern int ShellWantsHW;
 extern int initDNA();
 
 // list of accelerator dispatch functions
+
+extern int generate(unsigned int, int, long, int);
 #define BLOOM 1
 extern int bloom(unsigned int, int, long);
-#define GENERATE 0
-extern int generate(unsigned int, int, long);
 //extern int generate(unsigned int, int, long, int);
 
 #define STRCPY   2
