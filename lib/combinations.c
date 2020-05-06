@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
     case 0:
       while (1) {
         asm volatile ("fence");
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
 	        testResult = generate0(inputString, WIDTH, answer);
         }
         asm volatile ("fence");
@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
     case 1:
       while (1) {
         asm volatile ("fence");
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
 	        testResult = generate1(inputString, WIDTH, answer);
         }
         asm volatile ("fence");
@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
     case 2: 
       while (1) {
         asm volatile ("fence");
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
 	        testResult = generate2(inputString, WIDTH, answer);
         }
         asm volatile ("fence");
