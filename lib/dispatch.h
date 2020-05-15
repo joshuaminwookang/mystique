@@ -24,6 +24,7 @@ extern accMeta DNA[];
 extern int DNAinitialized;
 extern int ShellWantsHW;
 extern int initDNA();
+extern unsigned char bloom_filter_array[1000];
 
 // list of accelerator dispatch functions
 #define GENERATE0 0
@@ -35,6 +36,11 @@ extern int generate1(unsigned int, int, long);
 #define GENERATE2 2
 extern int generate2(unsigned int, int, long);
 
+#define BLOOM_MAP 3
+extern void mapWordsFromArray(int);
+
+#define BLOOM_TEST 4
+extern int countMissFromArray(int);
 // #define BLOOM 1
 // extern int bloom(unsigned int, int, long);
 // //extern int generate(unsigned int, int, long, int);
@@ -44,7 +50,7 @@ extern int generate2(unsigned int, int, long);
 // #define STRCMP   3
 // extern int wstrcmp(char *, char*);
 
-#define NACC 3 // number of accelerators
+#define NACC 5 // number of accelerators
 
 // different declarations of the heuristic function
 typedef int (*heurFun_t)(int);

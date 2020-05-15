@@ -4,7 +4,7 @@ LDFLAGS=-static -nostdlib -nostartfiles -lgcc
 #WIDTH=6
 
 # Change this to add tests
-PROGRAMS = combinations
+PROGRAMS = combinations bloom
 
 default: dispatch $(PROGRAMS)
 
@@ -21,6 +21,18 @@ combinations.S: combinations.c mmio.h
 	$(GCC) $(CFLAGS) -S -c $< -o $@
 
 combinations: combinations.o dispatch.o
+	$(GCC) -Wall  $^ -o $@.riscv
+
+bloom.o: bloom.S
+	$(GCC) $(CFLAGS) -D__ASSEMBLY__=1 -c $< -o $@
+
+bloom.o: combinations.c mmio.h
+	$(GCC) $(CFLAGS) -c $< -o $@
+
+bloom.S: bloom.c mmio.h
+	$(GCC) $(CFLAGS) -S -c $< -o $@
+
+bloom: bloom.o dispatch.o
 	$(GCC) -Wall  $^ -o $@.riscv
 
 clean:

@@ -6,6 +6,7 @@
 #include "encoding.h"
 #include "dispatch.h"
 #include "combinations.h"
+#include "bloom.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,7 +22,9 @@ accMeta DNA[NACC] =
 {
     ACCEL(GENERATE0,0, generate0_hw, generate0_sw),
     ACCEL(GENERATE1,0, generate1_hw, generate1_sw),
-    ACCEL(GENERATE2,0, generate2_hw, generate2_sw)
+    ACCEL(GENERATE2,0, generate2_hw, generate2_sw),
+    ACCEL(BLOOM_MAP,1, hw_mapWordsFromArray, sw_mapWordsFromArray),
+    ACCEL(BLOOM_TEST,1, hw_countMissFromArray, sw_countMissFromArray)
     //ACCEL(STRCMP,1,strcmp_hw,strcmp_sw),    
 };
 
@@ -60,7 +63,22 @@ int generate2 (unsigned int inputString, int length, long answer) {
     return ((int (*) ()) DNA[GENERATE2].sw_fun)(inputString, length, answer);
   //  return generate_hw(inputString, length, answer);
 }
-
+// Top level "dispatch" functions for each accelerator
+void mapWordsFromArray (int num) {
+  if (DNA[BLOOM_MAP].hw_on)
+    return ((void (*) ()) DNA[BLOOM_MAP].hw_fun)(num);
+  else
+    return ((void (*) ()) DNA[BLOOM_MAP].hw_fun)(num);
+  //  return generate_hw(inputString, length, answer);
+}
+// Top level "dispatch" functions for each accelerator
+int countMissFromArray (int num) {
+  if (DNA[BLOOM_MAP].hw_on)
+    return ((int (*) ()) DNA[BLOOM_TEST].hw_fun)(num);
+  else
+    return ((int (*) ()) DNA[BLOOM_TEST].hw_fun)(num);
+  //  return generate_hw(inputString, length, answer);
+}
 
 
 // int wstrcmp (char *a, char *b) {
@@ -76,6 +94,8 @@ int initDNA()
   DNA[GENERATE0].hw_avail = 1;
   DNA[GENERATE1].hw_avail = 1;
   DNA[GENERATE2].hw_avail = 1;
+  DNA[BLOOM_MAP].hw_avail = 1;
+  DNA[BLOOM_TEST].hw_avail = 1;
 
   //check shell environment variable (getenv) for HW/SW use decision set ShellWantsHW
   char* variable;
@@ -87,6 +107,9 @@ int initDNA()
   DNA[GENERATE0].hw_on = ShellWantsHW;
   DNA[GENERATE1].hw_on = ShellWantsHW;
   DNA[GENERATE2].hw_on = ShellWantsHW;
+  DNA[BLOOM_MAP].hw_on = ShellWantsHW;
+  DNA[BLOOM_TEST].hw_on = ShellWantsHW;
+
 
   // record load statistics
   // set a timer to call initDNA again in a minute

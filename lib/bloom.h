@@ -1,9 +1,5 @@
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
-#include <string.h>
-#include <time.h>
 #include <ctype.h>
 #include <stdint.h>
 #include "rocc.h"
@@ -46,18 +42,7 @@ unsigned long hashstring(char* word)
  */
 void mapToBloom(int index)
 {
-    #ifdef TINY
-    long x = hashstring(tiny0[index]); 
-    #endif
-    #ifdef TINYV2
-    long x = hashstring(tiny2[index]); 
-    #endif
-    #ifdef TINYV3_MAP
     long x = hashstring(tiny4[index]); 
-    #endif
-    #ifdef TINYV3_TEST
-    long x = hashstring(tiny2[index]); 
-    #endif
     
     long y = x >> 4;
 
@@ -72,7 +57,7 @@ void mapToBloom(int index)
 /*
  * Reads words from array and maps them to Bloom filter.
  */
-void mapWordsFromArray(int num)
+void sw_mapWordsFromArray(int num)
 {
     for (int i = 0; i < num; i++)
     {
@@ -89,18 +74,7 @@ void mapWordsFromArray(int num)
  */
 int testBloom(int index)
 {
-    #ifdef TINY
-    long x = hashstring(tiny1[index]); 
-    #endif
-    #ifdef TINYV2
     long x = hashstring(tiny3[index]); 
-    #endif
-    #ifdef TINYV3_MAP
-    long x = hashstring(tiny3[index]); 
-    #endif
-    #ifdef TINYV3_TEST
-    long x = hashstring(tiny4[index]); 
-    #endif
     long y = x >> 4; 
 
     for (int i = 0; i < K_NUM_HASH; i++)
@@ -117,7 +91,7 @@ int testBloom(int index)
     return 1;
 }
 
-int countMissFromArray(int num)
+int sw_countMissFromArray(int num)
 {
     int count = 0;
 
@@ -133,3 +107,72 @@ int countMissFromArray(int num)
 }
 
 
+/*
+ * Initializes / resets Bloom filter hardware accelerator 
+ */
+static inline unsigned long hw_initBloom()
+{
+    unsigned long rd;
+    // asm volatile ("fence");
+	ROCC_INSTRUCTION(0, 0);
+    // asm volatile ("fence");
+	return rd ;
+}
+
+/*
+ * Maps (already hashed) word to Bloom filter
+ * @ params: hash value of input string to be mapped
+ * @ returns: hash value of input string
+ */
+static inline unsigned long hw_mapToBloom(long hash)
+{
+    unsigned long rd;
+    // asm volatile ("fence");
+	ROCC_INSTRUCTION_DS(0, rd, hash, 1);
+    // asm volatile ("fence");
+	return rd;
+}
+
+/*
+ * Tests if word is in Bloom filter
+ * @ params: hash value of string to be tested against BF
+ * @ returns: current miss count
+ */
+static inline unsigned long hw_testBloom(long hash)
+{
+    unsigned long rd;
+    // asm volatile ("fence");
+	ROCC_INSTRUCTION_DS(0, rd, hash, 2);
+    // asm volatile ("fence");
+	return rd;
+}
+
+/*
+ * Using HW accelerator:
+ * reads words from array and map them to Bloom filter.
+ */
+
+void hw_mapWordsFromArray(int num)
+{
+    for (int i = 0; i < num; i++)
+    {
+       unsigned long returnValue ; 
+        returnValue = hw_mapToBloom(hashstring(tiny3[i]));
+    }
+}
+
+/* (Using HW accelerator)
+ * Counts number of misses from tests
+ */
+int hw_countMissFromArray(int num)
+{
+
+    int count = 0;
+
+    for (int i = 0; i < num; i++)
+    {
+\        count = hw_testBloom(hashstring(tiny3[i]));
+    }
+
+    return count;
+}

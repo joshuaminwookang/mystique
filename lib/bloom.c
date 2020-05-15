@@ -9,23 +9,26 @@
 #include <stdint.h>
 #include "rocc.h"
 #include "encoding.h"
-#include "compiler.h"
 #include <signal.h>
 #include <sys/time.h>
 #include <sys/sysinfo.h>
 #include "dispatch.h"
 
-#ifdef __linux
-#include <sys/mman.h>
-#endif
+#define BUF_SIZE 100     // max size of word
+#define M_NUM_BITS 1000 // number of elements in Bloom filter
+#define K_NUM_HASH 5     // number of hash functions
+#define HASH_NUM 5381    // number used for hash function
+#include "small_data.h"
 
 /* Global loop count variable*/
 unsigned long long num_loops = 0;
 struct timeval start_tv,end_tv;
 long start_time, end_time;
 
-/* Global combinations function variable*/
 int funct;
+
+/* global Bloom bit array */
+extern unsigned char bloom_filter_array[M_NUM_BITS];
 
 void print_stats(){
   /* Conversion constants. */
@@ -57,7 +60,7 @@ void sigintHandler(int dummy)
   print_stats();
 
   /* Reset handler to catch SIGINT next time. */
-  printf("\n Results for function: %d with ACCEL: %d \n Elapsed Loops count: %lld\n Elapsed Time: %ld seconds\n",
+  printf("\n Bloom Results for function: %d with ACCEL: %d \n Elapsed Loops count: %lld\n Elapsed Time: %ld seconds\n",
 	   funct, ShellWantsHW, num_loops, end_time-start_time);
   fflush(stdout);
   //  initDNA();
@@ -68,68 +71,55 @@ void sigintHandler(int dummy)
 
 /* FUNCT declarations*/
 extern int initDNA();
-extern int generate0(unsigned int, int, long);
-extern int generate1(unsigned int, int, long);
-extern int generate2(unsigned int, int, long);
+extern void mapWordsFromArray(int;
+extern int countMissFromArray(int);
 extern int ShellWantsHW;
 
 
 /*
  * Test script 
  */
-int main(void)
-{
-    unsigned long start, end;
-    int sw_misses = 0;
-    
+int main(int argc, char **argv) {
+  funct = 0;
+  if (argc > 1) funct = atoi(argv[1]); 
+  if(initDNA() < 0) exit(1);
+  int misses = 0;
 
-    printf("Beginning Bloom filter SW \n");
-    
-    // Initialize SW bloom filter array
-    memset(bloom_filter_array, 0, M_NUM_BITS);
-    // for (int i = 0; i < M_NUM_BITS; i++)
-    // {
-    //     bloom_filter_array[0] = 0;
-    // }
+  printf("Beginning Bloom filter for function: %d\n", funct);
+  
+  // Initialize SW bloom filter array
+  memset(bloom_filter_array, 0, M_NUM_BITS);
+  // Read in new ACCEL environemnt variable and reset HW or SW
+  signal(SIGINT, sigintHandler);
 
-    // SW: Map
-    start = rdcycle(); 
-    // map words to Bloom filter
-    #ifdef TINY
-    mapWordsFromArray(TINY);
-    #endif
-    #ifdef TINYV2
-    mapWordsFromArray(TINYV2);
-    #endif
-    #ifdef TINYV3_MAP
-    mapWordsFromArray(TINYV3_MAP);
-    #endif
-    #ifdef TINYV3_TEST
-    mapWordsFromArray(30);
-    #endif
-    end = rdcycle();  
-    printf("SW MAP execution took %lu cycles\n", end - start); 
+  gettimeofday(&start_tv,NULL);
+  start_time = start_tv.tv_sec%(24*3600);
 
-    // SW: TEST
-    start = rdcycle(); 
-    // test if words in file 2 are in Bloom filter
-    #ifdef TINY
-    sw_misses = countMissFromArray(TINY);
-    #endif
-    #ifdef TINYV2
-    sw_misses = countMissFromArray(TINYV2);
-    #endif
-    #ifdef TINYV3_MAP
-    sw_misses = countMissFromArray(30);
-    #endif
-    #ifdef TINYV3_TEST
-    sw_misses = countMissFromArray(TINYV3_TEST);
-    #endif
-    end = rdcycle(); 
 
-    // print out info
-    printf("SW TEST execution took %lu cycles\n", end - start); 
-    printf("Software Misses: %d\n", sw_misses);
+  switch (funct){
+    case 0:
+      while (1) {
+        asm volatile ("fence");
+        for (int i = 0; i < 100; i++) {
+	        mapWordsFromArray(50);
+		      num_loops++;
+        }
+        asm volatile ("fence");
+      } 
+      break;
+    case 1:
+      while (1) {
+        asm volatile ("fence");
+        for (int i = 0; i < 100; i++) {
+	        misses = countMissFromArray(50);
+		      num_loops++;
+        }
+        asm volatile ("fence");
+      } 
+      break;
+    default:
+      break;
+  }
 
     return 0;
 }
