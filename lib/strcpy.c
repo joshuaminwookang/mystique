@@ -1,17 +1,23 @@
-#include <signal.h>
-#include <sys/time.h>
-#include <sys/sysinfo.h>
+
+// Testbench C code for ranged comginations
+// (c) Josh Kang
+
 #include "rocc.h"
 #include "encoding.h"
 #include "dispatch.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <sys/sysinfo.h>
+
 
 /* Global loop count variable*/
 unsigned long long num_loops = 0;
 struct timeval start_tv,end_tv;
 long start_time, end_time;
 
-/* global Bloom bit array */
-extern unsigned char bloom_filter_array[M_NUM_BITS];
 
 void print_stats(){
   /* Conversion constants. */
