@@ -1,30 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <time.h>
-#include <ctype.h>
-#include <stdint.h>
-#include "rocc.h"
-#include "encoding.h"
 #include <signal.h>
 #include <sys/time.h>
 #include <sys/sysinfo.h>
+#include "rocc.h"
+#include "encoding.h"
 #include "dispatch.h"
-
-#define BUF_SIZE 100     // max size of word
-#define M_NUM_BITS 1000 // number of elements in Bloom filter
-#define K_NUM_HASH 5     // number of hash functions
-#define HASH_NUM 5381    // number used for hash function
-#include "small_data.h"
 
 /* Global loop count variable*/
 unsigned long long num_loops = 0;
 struct timeval start_tv,end_tv;
 long start_time, end_time;
-
-int funct;
-int misses;
 
 /* global Bloom bit array */
 extern unsigned char bloom_filter_array[M_NUM_BITS];
@@ -59,10 +43,8 @@ void sigintHandler(int dummy)
   print_stats();
 
   /* Reset handler to catch SIGINT next time. */
-  printf("\n Bloom Results for function: %d with ACCEL: %d \n Elapsed Loops count: %lld\n Elapsed Time: %ld seconds\n",
-	   funct, ShellWantsHW, num_loops, end_time-start_time);
-  printf("Misses : %d\n", misses);
-  
+  printf("\n STRCPY Results with ACCEL: %d \n Elapsed Loops count: %lld\n Elapsed Time: %ld seconds\n",
+	    ShellWantsHW, num_loops, end_time-start_time);  
   fflush(stdout);
   //  initDNA();
   //  gettimeofday(&start_tv,NULL);
@@ -72,54 +54,27 @@ void sigintHandler(int dummy)
 
 /* FUNCT declarations*/
 extern int initDNA();
-extern void mapWordsFromArray(int);
-extern int countMissFromArray(int);
+extern char* wstrcpy(const char *, const char *);
 extern int ShellWantsHW;
-
 
 /*
  * Test script 
  */
 int main(int argc, char **argv) {
-  funct = 0; misses=0;
-  if (argc > 1) funct = atoi(argv[1]); 
-  if(initDNA() < 0) exit(1);
-
-  printf("Beginning Bloom filter for function: %d\n", funct);
   
-  // Initialize SW bloom filter array
-  memset(bloom_filter_array, 0, M_NUM_BITS);
   // Read in new ACCEL environemnt variable and reset HW or SW
   signal(SIGINT, sigintHandler);
 
   gettimeofday(&start_tv,NULL);
   start_time = start_tv.tv_sec%(24*3600);
 
-
-  switch (funct){
-    case 0:
-      while (1) {
-        asm volatile ("fence");
-        for (int i = 0; i < 100; i++) {
-	        mapWordsFromArray(10000);
-		      num_loops++;
-        }
-        asm volatile ("fence");
-      } 
-      break;
-    case 1:
-      while (1) {
-        asm volatile ("fence");
-        for (int i = 0; i < 100; i++) {
-	        misses = countMissFromArray(10000);
-		      num_loops++;
-        }
-        asm volatile ("fence");
-      } 
-      break;
-    default:
-      break;
+  char *a = "Now is the time for all good men to come to the aid of their country.\n";
+  char b[100] = "hi\n";
+  while (1) {
+    for (int i = 0; i < 100; i++) {
+      wstrcpy(b,a);
+      num_loops++;
+    }
   }
-
-    return 0;
+  return 0;
 }

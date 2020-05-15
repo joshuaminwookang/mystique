@@ -7,6 +7,7 @@
 #include "dispatch.h"
 #include "combinations.h"
 #include "bloom.h"
+#include "strcpy.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,7 +25,8 @@ accMeta DNA[NACC] =
     ACCEL(GENERATE1,0, generate1_hw, generate1_sw),
     ACCEL(GENERATE2,0, generate2_hw, generate2_sw),
     ACCEL(BLOOM_MAP,1, hw_mapWordsFromArray, sw_mapWordsFromArray),
-    ACCEL(BLOOM_TEST,1, hw_countMissFromArray, sw_countMissFromArray)
+    ACCEL(BLOOM_TEST,1, hw_countMissFromArray, sw_countMissFromArray),
+    ACCEL(STRCPY,2, hwStrcpy, strcpy)
     //ACCEL(STRCMP,1,strcmp_hw,strcmp_sw),    
 };
 
@@ -80,6 +82,14 @@ int countMissFromArray (int num) {
   //  return generate_hw(inputString, length, answer);
 }
 
+// Top level "dispatch" functions for each accelerator
+char* wstrcpy (const char *dst, const char *src) {
+  if (DNA[STRCPY].hw_on)
+    return ((char* (*) ()) DNA[STRCPY].hw_fun)(dst,src);
+  else
+    return ((char* (*) ()) DNA[STRCPY].hw_fun)(dst,src);
+  //  return generate_hw(inputString, length, answer);
+}
 
 // int wstrcmp (char *a, char *b) {
 //      if (heuristic(STRCMP))
@@ -96,6 +106,8 @@ int initDNA()
   DNA[GENERATE2].hw_avail = 1;
   DNA[BLOOM_MAP].hw_avail = 1;
   DNA[BLOOM_TEST].hw_avail = 1;
+  DNA[STRCPY].hw_avail = 1;
+
 
   //check shell environment variable (getenv) for HW/SW use decision set ShellWantsHW
   char* variable;
@@ -109,7 +121,7 @@ int initDNA()
   DNA[GENERATE2].hw_on = ShellWantsHW;
   DNA[BLOOM_MAP].hw_on = ShellWantsHW;
   DNA[BLOOM_TEST].hw_on = ShellWantsHW;
-
+  DNA[STRCPY].hw_on = ShellWantsHW;
 
   // record load statistics
   // set a timer to call initDNA again in a minute

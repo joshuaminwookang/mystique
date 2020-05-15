@@ -1,4 +1,3 @@
-
 #include <math.h>
 #include <ctype.h>
 #include <stdint.h>
@@ -12,7 +11,6 @@
 #define HASH_NUM 5381    // number used for hash function
 #include "small_data.h"
 
-#define TINYV3_MAP  50
 
 /* global Bloom bit array */
 unsigned char bloom_filter_array[M_NUM_BITS];
@@ -42,7 +40,7 @@ unsigned long hashstring(char* word)
  */
 void mapToBloom(int index)
 {
-    long x = hashstring(tiny4[index]); 
+    long x = hashstring(small[index]); 
     
     long y = x >> 4;
 
@@ -74,7 +72,7 @@ void sw_mapWordsFromArray(int num)
  */
 int testBloom(int index)
 {
-    long x = hashstring(tiny3[index]); 
+    long x = hashstring(small[index]); 
     long y = x >> 4; 
 
     for (int i = 0; i < K_NUM_HASH; i++)
@@ -157,7 +155,7 @@ void hw_mapWordsFromArray(int num)
     for (int i = 0; i < num; i++)
     {
        unsigned long returnValue ; 
-        returnValue = hw_mapToBloom(hashstring(tiny3[i]));
+        returnValue = hw_mapToBloom(hashstring(small[i]));
     }
 }
 
@@ -171,7 +169,7 @@ int hw_countMissFromArray(int num)
 
     for (int i = 0; i < num; i++)
     {
-        count = hw_testBloom(hashstring(tiny3[i]));
+        count = hw_testBloom(hashstring(small[i]));
     }
 
     return count;

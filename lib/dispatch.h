@@ -45,12 +45,12 @@ extern int countMissFromArray(int);
 // extern int bloom(unsigned int, int, long);
 // //extern int generate(unsigned int, int, long, int);
 
-// #define STRCPY   2
-// extern int wstrcpy(char *, char*);
+#define STRCPY 5
+extern char* wstrcpy(const char *, const char *);
 // #define STRCMP   3
 // extern int wstrcmp(char *, char*);
 
-#define NACC 5 // number of accelerators
+#define NACC 6 // number of accelerators
 
 // different declarations of the heuristic function
 typedef int (*heurFun_t)(int);
