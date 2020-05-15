@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "rocc.h"
 #include "encoding.h"
-#include "compiler.h"
+
 
 #define BUF_SIZE 100     // max size of word
 #define M_NUM_BITS 1000 // number of elements in Bloom filter
@@ -171,7 +171,7 @@ int hw_countMissFromArray(int num)
 
     for (int i = 0; i < num; i++)
     {
-\        count = hw_testBloom(hashstring(tiny3[i]));
+        count = hw_testBloom(hashstring(tiny3[i]));
     }
 
     return count;

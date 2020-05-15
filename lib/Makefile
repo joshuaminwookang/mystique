@@ -14,9 +14,6 @@ dispatch: dispatch.c
 combinations.o: combinations.S
 	$(GCC) $(CFLAGS) -D__ASSEMBLY__=1 -c $< -o $@
 
-combinations.o: combinations.c mmio.h
-	$(GCC) $(CFLAGS) -c $< -o $@
-
 combinations.S: combinations.c mmio.h
 	$(GCC) $(CFLAGS) -S -c $< -o $@
 
@@ -25,9 +22,6 @@ combinations: combinations.o dispatch.o
 
 bloom.o: bloom.S
 	$(GCC) $(CFLAGS) -D__ASSEMBLY__=1 -c $< -o $@
-
-bloom.o: combinations.c mmio.h
-	$(GCC) $(CFLAGS) -c $< -o $@
 
 bloom.S: bloom.c mmio.h
 	$(GCC) $(CFLAGS) -S -c $< -o $@

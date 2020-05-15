@@ -26,6 +26,7 @@ struct timeval start_tv,end_tv;
 long start_time, end_time;
 
 int funct;
+int misses;
 
 /* global Bloom bit array */
 extern unsigned char bloom_filter_array[M_NUM_BITS];
@@ -62,6 +63,8 @@ void sigintHandler(int dummy)
   /* Reset handler to catch SIGINT next time. */
   printf("\n Bloom Results for function: %d with ACCEL: %d \n Elapsed Loops count: %lld\n Elapsed Time: %ld seconds\n",
 	   funct, ShellWantsHW, num_loops, end_time-start_time);
+  printf("Misses : %d\n", misses);
+  
   fflush(stdout);
   //  initDNA();
   //  gettimeofday(&start_tv,NULL);
@@ -71,7 +74,7 @@ void sigintHandler(int dummy)
 
 /* FUNCT declarations*/
 extern int initDNA();
-extern void mapWordsFromArray(int;
+extern void mapWordsFromArray(int);
 extern int countMissFromArray(int);
 extern int ShellWantsHW;
 
@@ -80,10 +83,9 @@ extern int ShellWantsHW;
  * Test script 
  */
 int main(int argc, char **argv) {
-  funct = 0;
+  funct = 0; misses=0;
   if (argc > 1) funct = atoi(argv[1]); 
   if(initDNA() < 0) exit(1);
-  int misses = 0;
 
   printf("Beginning Bloom filter for function: %d\n", funct);
   
