@@ -55,6 +55,5 @@ extern heurFun_t heuristic;
 // extern heurFun_t useHW;
 // extern heurFun_t shellMediatedHW;
 
-
 #define WIDTH 16
 #endif

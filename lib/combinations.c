@@ -1,3 +1,4 @@
+
 // Testbench C code for ranged comginations
 // (c) Josh Kang
 
@@ -11,7 +12,6 @@
 #include <sys/time.h>
 #include <sys/sysinfo.h>
 
-#define WIDTH 16
 
 /* Global loop count variable*/
 unsigned long long num_loops = 0;
@@ -112,9 +112,9 @@ int main(int argc, char **argv) {
         asm volatile ("fence");
         for (int i = 0; i < 100; i++) {
 	        testResult = generate0(inputString, WIDTH, answer);
+		num_loops++;
         }
         asm volatile ("fence");
-        num_loops++;
       } 
       break;
     case 1:
@@ -122,9 +122,9 @@ int main(int argc, char **argv) {
         asm volatile ("fence");
         for (int i = 0; i < 100; i++) {
 	        testResult = generate1(inputString, WIDTH, answer);
+		num_loops++;
         }
         asm volatile ("fence");
-        num_loops++;
       } 
       break;
     case 2: 
@@ -132,9 +132,9 @@ int main(int argc, char **argv) {
         asm volatile ("fence");
         for (int i = 0; i < 100; i++) {
 	        testResult = generate2(inputString, WIDTH, answer);
+		num_loops++;
         }
         asm volatile ("fence");
-        num_loops++;
       } 
       break;
   }
