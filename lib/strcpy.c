@@ -74,10 +74,10 @@ int main(int argc, char **argv) {
   gettimeofday(&start_tv,NULL);
   start_time = start_tv.tv_sec%(24*3600);
 
-  char *a = "Now is the time for all good men to come to the aid of their country.\n";
-  char b[100] = "hi\n";
   while (1) {
     for (int i = 0; i < 100; i++) {
+      char *a = "Now is the time for all good men to come to the aid of their country.\n";
+      char b[100] = "hi\n";
       wstrcpy(b,a);
       num_loops++;
     }
